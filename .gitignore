@@ -1,0 +1,11 @@
+node_modules/
+yarn.lock
+.idea/
+Builds/
+JuceLibraryCode/
+ios/Podfile.lock
+ios/Pods/
+ios/RNJuce.xcworkspace/
+ios/RNJuce.xcodeproj/
+ios/build/Debug/RNJuce.app
+ios/build/Debug/
