@@ -136,6 +136,8 @@ def ios_setup(projucer, project):
 
         if f"libPods-{project_name}" in line and remove_pods_lib:
             remove_pods_lib = False
+            output.append("\t\t\t\tA124F7FF2736C766007F6F35 /* OpenSSL.xcframework in Frameworks */,\n")
+            output.append("\t\t\t\tA124F7FC2736C761007F6F35 /* double-conversion.xcframework in Frameworks */,\n")
             continue
 
         if 'INFOPLIST_FILE = "Info-App.plist";' in line:
