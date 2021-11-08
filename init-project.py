@@ -2,6 +2,7 @@ from subprocess import Popen, PIPE, STDOUT
 import os
 from pathlib import Path
 import sys
+import shutil
 
 def get_script_dir():
     return Path(sys.path[0])
@@ -211,9 +212,56 @@ def ios_setup(projucer, project):
         file.writelines(output)
 
 
+def android_setup(projucer, project):
+    juce_files_root = get_script_dir() / "Builds" / "Android"
+    rn_files_root = get_script_dir() / "android"
+
+    shutil.copy2(juce_files_root / "local.properties", rn_files_root / "local.properties")
+
+    (rn_files_root / "cpp").mkdir(parents=True, exist_ok=True)
+    shutil.copy2(juce_files_root / "app" / "CMakeLists.txt", rn_files_root / "app" / "cpp" / "CMakeLists.txt")
+
+    # Find JUCE java files
+    with open(juce_files_root / "app" / "build.gradle", "r") as f:
+        lines = f.readlines()
+
+        found_juce_files = False
+        juce_jave_files = []
+
+        for line in lines:
+            if "main.java.srcDirs +=" in line:
+                found_juce_files = True
+                continue
+
+            if found_juce_files:
+                if len(line.strip()) == 0:
+                    break
+                juce_jave_files.append(line.replace("[", "").replace("\"", "").replace("]", "").replace(",", "").strip())
+
+    absolute_juce_jave_files = [(juce_files_root / "app" / f).resolve() for f in juce_jave_files]
+    copy_files = []
+
+    for dir in absolute_juce_jave_files:
+        files = dir.rglob("*.java")
+        for f in files:
+            if "JuceApp.java" in str(f) or "JuceActivity.java" in str(f):
+                continue
+            copy_files.append(f)
+
+    for file in copy_files:
+        output = get_script_dir() / "android" / "app" / "src" / "main" / "java"
+
+        new_path_part = str(file)[str(file).index("com/rmsl"):]
+        new_path = output / new_path_part
+
+        new_path.parent.mkdir(exist_ok=True, parents=True)
+        shutil.copy2(file, new_path)
+
+
 juce_path = get_script_dir() / "JUCE"
 projucer = get_projucer(juce_path)
 
 resave_project(projucer, get_script_dir() / "RNJuce.jucer")
 
 ios_setup(projucer, get_script_dir() / "RNJuce.jucer")
+android_setup(projucer, get_script_dir() / "RNJuce.jucer")

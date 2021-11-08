@@ -171,6 +171,7 @@ android {
                     abiFilters nativeArchitectures.split(',')
                 }
             }
+            debuggable    true
             jniDebuggable true
 
             externalNativeBuild {
