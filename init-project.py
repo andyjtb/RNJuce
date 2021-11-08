@@ -257,6 +257,16 @@ def android_setup(projucer, project):
         new_path.parent.mkdir(exist_ok=True, parents=True)
         shutil.copy2(file, new_path)
 
+    shutil.rmtree(get_script_dir() / "Builds" / "Android")
+
+
+if not (get_script_dir() / "node_modules").exists():
+    if check_application_exists("yarn"):
+        runcmd("yarn install")
+    elif check_application_exists("npm"):
+        runcmd("npm install")
+    else:
+        raise RuntimeError("Please install JS packages first")
 
 juce_path = get_script_dir() / "JUCE"
 projucer = get_projucer(juce_path)
