@@ -60,7 +60,9 @@ public:
             centreWithSize (getWidth(), getHeight());
            #endif
 
-            setVisible (true);
+            #if ! JUCE_ANDROID
+             setVisible (true);
+            #endif
         }
 
         void closeButtonPressed() override
