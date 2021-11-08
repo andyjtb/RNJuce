@@ -9,3 +9,6 @@ ios/RNJuce.xcworkspace/
 ios/RNJuce.xcodeproj/
 ios/build/Debug/RNJuce.app
 ios/build/Debug/
+android/.gradle/
+android/app/.cxx/
+android/app/build/
