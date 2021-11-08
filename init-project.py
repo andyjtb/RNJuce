@@ -218,7 +218,7 @@ def android_setup(projucer, project):
 
     shutil.copy2(juce_files_root / "local.properties", rn_files_root / "local.properties")
 
-    (rn_files_root / "cpp").mkdir(parents=True, exist_ok=True)
+    (rn_files_root / "app" / "cpp").mkdir(parents=True, exist_ok=True)
     shutil.copy2(juce_files_root / "app" / "CMakeLists.txt", rn_files_root / "app" / "cpp" / "CMakeLists.txt")
 
     # Find JUCE java files
